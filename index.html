@@ -216,7 +216,7 @@ nav.scrolled { background: rgba(13,13,13,0.82); border-bottom-color: rgba(255,25
   width: calc(100% + 80px);
   height: calc(100% + 80px);
   background: url('assets/hero-bg.png') center/cover no-repeat;
-  opacity: 0.35;
+  opacity: 0.55;
   pointer-events: none;
   will-change: transform;
   transition: transform 200ms ease-out;
@@ -280,6 +280,26 @@ nav.scrolled { background: rgba(13,13,13,0.82); border-bottom-color: rgba(255,25
   padding: 0 12px;
   border-radius: 8px;
 }
+.hero-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+.hero-name .letter {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: rgba(255,255,255,0.25);
+  transition: color 300ms ease;
+  display: inline-block;
+}
+.hero-name .letter.space { width: 0.3em; }
+.hero-name .letter.lit { color: var(--voltage); }
+
 .hero-sub {
   font-size: 17px;
   color: rgba(255,255,255,0.55);
@@ -588,6 +608,12 @@ nav.scrolled { background: rgba(13,13,13,0.82); border-bottom-color: rgba(255,25
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0.35;
+  transition: opacity 400ms ease;
+}
+.phone-frame:hover img,
+.phone-frame:hover video {
+  opacity: 1;
 }
 .phone-info {
   position: absolute;
@@ -643,8 +669,38 @@ nav.scrolled { background: rgba(13,13,13,0.82); border-bottom-color: rgba(255,25
   display: block;
 }
 
+.showcase-marquee {
+  overflow: hidden;
+  padding: 48px 0 0;
+  white-space: nowrap;
+  position: relative;
+}
+.showcase-marquee-track {
+  display: inline-flex;
+  animation: marqueeScroll 18s linear infinite;
+}
+.showcase-marquee-track span {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.08);
+  padding: 0 32px;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.12);
+}
+.showcase-marquee-track span.accent {
+  color: rgba(200,240,0,0.15);
+  -webkit-text-stroke-color: rgba(200,240,0,0.2);
+}
+@keyframes marqueeScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .showcase-col-inner { animation: none !important; }
+  .showcase-marquee-track { animation: none !important; }
 }
 
 /* ========================================
@@ -1299,6 +1355,7 @@ body.modal-open { overflow: hidden; }
   <div class="hero-content">
     <p class="hero-eyebrow reveal">Portfolio &middot; Case studies &middot; Client onboarding</p>
     <h1><span class="word">From</span> <span class="word">edits</span> <span class="word">to</span> <span class="word accent">systems.</span></h1>
+    <div class="hero-name reveal reveal-delay-1" id="heroName" aria-label="Zac Morrison"></div>
     <p class="hero-sub reveal reveal-delay-2">Zac Morrison builds brands that convert. Five years of video editing, a graphic design degree, and real-world results across email, print, and digital.</p>
     <div class="hero-actions reveal reveal-delay-3">
       <a class="btn btn-primary" href="#portfolio" data-magnetic>
@@ -1552,6 +1609,15 @@ body.modal-open { overflow: hidden; }
   <div class="showcase-video-row reveal">
     <div class="showcase-video-frame">
       <video src="assets/main-reel.mp4" controls preload="metadata" playsinline></video>
+    </div>
+  </div>
+
+  <div class="showcase-marquee" aria-hidden="true">
+    <div class="showcase-marquee-track">
+      <span class="accent">Strategy</span><span>&bull;</span><span>Design</span><span>&bull;</span><span class="accent">Branding</span><span>&bull;</span><span>User-centric</span><span>&bull;</span>
+      <span class="accent">Strategy</span><span>&bull;</span><span>Design</span><span>&bull;</span><span class="accent">Branding</span><span>&bull;</span><span>User-centric</span><span>&bull;</span>
+      <span class="accent">Strategy</span><span>&bull;</span><span>Design</span><span>&bull;</span><span class="accent">Branding</span><span>&bull;</span><span>User-centric</span><span>&bull;</span>
+      <span class="accent">Strategy</span><span>&bull;</span><span>Design</span><span>&bull;</span><span class="accent">Branding</span><span>&bull;</span><span>User-centric</span><span>&bull;</span>
     </div>
   </div>
 </section>
@@ -2259,6 +2325,20 @@ body.modal-open { overflow: hidden; }
     });
   }
 
+  /* ---- "Zac Morrison" per-letter colour ---- */
+  var heroNameEl = document.getElementById('heroName');
+  var nameLetters = [];
+  if (heroNameEl) {
+    var nameStr = 'Zac Morrison';
+    for (var n = 0; n < nameStr.length; n++) {
+      var span = document.createElement('span');
+      span.className = nameStr[n] === ' ' ? 'letter space' : 'letter';
+      span.textContent = nameStr[n] === ' ' ? '\u00A0' : nameStr[n];
+      heroNameEl.appendChild(span);
+      nameLetters.push(span);
+    }
+  }
+
   /* ---- Hero spotlight + parallax background ---- */
   var heroSection = document.getElementById('hero');
   var spotlight = document.getElementById('heroSpotlight');
@@ -2290,6 +2370,16 @@ body.modal-open { overflow: hidden; }
           spotlight.style.setProperty('--my', my + '%');
           spotlight.classList.add('is-active');
         }
+
+        if (nameLetters.length) {
+          nameLetters.forEach(function (ltr) {
+            var lr = ltr.getBoundingClientRect();
+            var lcx = lr.left + lr.width / 2;
+            var lcy = lr.top + lr.height / 2;
+            var dist = Math.hypot(e.clientX - lcx, e.clientY - lcy);
+            ltr.classList.toggle('lit', dist < 120);
+          });
+        }
       });
     });
     heroSection.addEventListener('pointerleave', function () {
@@ -2298,6 +2388,7 @@ body.modal-open { overflow: hidden; }
         heroBg.style.setProperty('--px', '0px');
         heroBg.style.setProperty('--py', '0px');
       }
+      nameLetters.forEach(function (ltr) { ltr.classList.remove('lit'); });
     });
   }
 
