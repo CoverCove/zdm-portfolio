@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# IDE
+.cursor/
+
+# Source files not needed for deployment
+IMG_0572.CR3
+Portfolio(official).pdf
+
+# Too large for GitHub (254MB) — host on a CDN for deployment
+Framertutorial.mp4
