@@ -1617,16 +1617,68 @@ body.modal-open { overflow: hidden; }
     });
   }
 
-  /* ---- Intake form ---- */
+  /* ---- Intake form → ConvertKit ---- */
+  var CK_FORM_ID = 'YOUR_FORM_ID';
+  var CK_API_KEY = 'YOUR_API_KEY';
+  var CK_TAG_ID  = 'YOUR_TAG_ID';
+
   var form = document.getElementById('intakeForm');
   var status = document.getElementById('intakeStatus');
+  var submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+
+  function setSubmitting(on) {
+    if (!submitBtn) return;
+    submitBtn.disabled = on;
+    submitBtn.style.opacity = on ? '0.6' : '';
+  }
+
+  async function subscribeEmail(email, firstName, fields) {
+    var res = await fetch(
+      'https://api.convertkit.com/v3/forms/' + CK_FORM_ID + '/subscribe',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          api_key: CK_API_KEY,
+          email: email,
+          first_name: firstName,
+          fields: fields,
+          tags: [CK_TAG_ID]
+        })
+      }
+    );
+    if (!res.ok) throw new Error('ConvertKit returned ' + res.status);
+    return res.json();
+  }
+
   if (form) {
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      var name = document.getElementById('intakeName').value.trim();
-      var need = document.getElementById('intakeNeed');
-      var sel = need.options[need.selectedIndex] ? need.options[need.selectedIndex].text : '';
-      status.textContent = (name ? 'Thanks, ' + name + '!' : 'Thanks!') + ' Your ' + sel + ' request has been noted. (Front-end demo — wire to your form handler or CRM to send emails.)';
+      var nameVal  = document.getElementById('intakeName').value.trim();
+      var emailVal = document.getElementById('intakeEmail').value.trim();
+      var needEl   = document.getElementById('intakeNeed');
+      var sel      = needEl.options[needEl.selectedIndex] ? needEl.options[needEl.selectedIndex].text : '';
+      var brief    = document.getElementById('intakeBrief').value.trim();
+
+      if (!emailVal) { status.textContent = 'Please enter your email.'; return; }
+
+      status.textContent = 'Sending…';
+      setSubmitting(true);
+
+      try {
+        await subscribeEmail(emailVal, nameVal, {
+          service_needed: sel,
+          project_brief: brief
+        });
+        status.style.color = 'var(--sage)';
+        status.textContent = (nameVal ? 'Thanks, ' + nameVal + '!' : 'Thanks!') + ' Your ' + sel + ' request has been received. I\'ll be in touch shortly.';
+        form.reset();
+      } catch (err) {
+        status.style.color = '#e55';
+        status.textContent = 'Something went wrong — please try again or email businesscovercove@gmail.com directly.';
+      } finally {
+        setSubmitting(false);
+      }
     });
   }
 
