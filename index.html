@@ -517,51 +517,89 @@ nav.scrolled { background: rgba(13,13,13,0.82); border-bottom-color: rgba(255,25
 }
 
 /* ========================================
-   SHOWCASE — iPhone-framed vertical scroll
+   SHOWCASE — full-bleed iPhone scroll
    ======================================== */
 .showcase {
   background: var(--void);
-  padding: 100px 0;
+  padding: 0;
   overflow: hidden;
   position: relative;
 }
-.showcase-header {
+
+.showcase-intro {
   max-width: 1200px;
-  margin: 0 auto 56px;
-  padding: 0 24px;
+  margin: 0 auto;
+  padding: 120px 24px 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
 }
-@media (min-width: 768px) { .showcase-header { padding: 0 40px; } }
+.showcase-intro-left {}
+.showcase-intro .section-number {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--voltage);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.showcase-intro .showcase-big-title {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 8vw, 100px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+.showcase-intro .showcase-big-title em {
+  font-style: italic;
+  color: var(--voltage);
+}
+.showcase-intro-right {
+  max-width: 360px;
+}
+.showcase-intro-right p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+}
 
 .showcase-columns {
   display: flex;
-  gap: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
-  height: 700px;
+  gap: 14px;
+  width: 100%;
+  padding: 48px 14px;
+  height: 780px;
   overflow: hidden;
 }
-@media (max-width: 600px) { .showcase-columns { height: 500px; gap: 12px; padding: 0 12px; } }
+@media (max-width: 768px) {
+  .showcase-columns { height: 520px; gap: 10px; padding: 32px 10px; }
+  .showcase-intro { padding: 80px 20px 32px; }
+}
 
 .showcase-col {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   overflow: hidden;
   position: relative;
 }
 .showcase-col-inner {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   will-change: transform;
 }
 .showcase-col:nth-child(odd) .showcase-col-inner {
-  animation: scrollUp 35s linear infinite;
+  animation: scrollUp 38s linear infinite;
 }
 .showcase-col:nth-child(even) .showcase-col-inner {
-  animation: scrollDown 40s linear infinite;
+  animation: scrollDown 42s linear infinite;
 }
 @keyframes scrollUp {
   0%   { transform: translateY(0); }
@@ -571,36 +609,38 @@ nav.scrolled { background: rgba(13,13,13,0.82); border-bottom-color: rgba(255,25
   0%   { transform: translateY(-50%); }
   100% { transform: translateY(0); }
 }
+.showcase-columns:hover .showcase-col-inner { animation-play-state: paused; }
 
 .phone-frame {
   position: relative;
   flex-shrink: 0;
-  border-radius: 36px;
+  border-radius: 28px;
   overflow: hidden;
-  background: #1a1a1a;
-  border: 3px solid rgba(255,255,255,0.12);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.04);
+  background: #111;
+  border: 2.5px solid rgba(255,255,255,0.08);
+  box-shadow: 0 6px 32px rgba(0,0,0,0.6);
   aspect-ratio: 9/16;
   width: 100%;
   cursor: pointer;
-  transition: transform 400ms cubic-bezier(.4,0,.2,1), border-color 400ms ease;
+  transition: transform 500ms cubic-bezier(.4,0,.2,1), border-color 500ms ease, box-shadow 500ms ease;
 }
 .phone-frame:hover {
-  transform: scale(1.03);
-  border-color: rgba(200,240,0,0.3);
+  transform: scale(1.04);
+  border-color: rgba(200,240,0,0.35);
+  box-shadow: 0 12px 48px rgba(200,240,0,0.08), 0 6px 32px rgba(0,0,0,0.6);
   z-index: 3;
 }
 .phone-frame::before {
   content: "";
   position: absolute;
-  top: 8px;
+  top: 7px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
-  height: 6px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.1);
-  z-index: 4;
+  width: 48px;
+  height: 5px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.08);
+  z-index: 5;
 }
 .phone-frame img,
 .phone-frame video {
@@ -608,12 +648,14 @@ nav.scrolled { background: rgba(13,13,13,0.82); border-bottom-color: rgba(255,25
   height: 100%;
   object-fit: cover;
   display: block;
-  opacity: 0.35;
-  transition: opacity 400ms ease;
+  opacity: 0.3;
+  filter: saturate(0.6);
+  transition: opacity 500ms ease, filter 500ms ease;
 }
 .phone-frame:hover img,
 .phone-frame:hover video {
   opacity: 1;
+  filter: saturate(1);
 }
 .phone-info {
   position: absolute;
@@ -621,17 +663,17 @@ nav.scrolled { background: rgba(13,13,13,0.82); border-bottom-color: rgba(255,25
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 20px 16px;
-  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, transparent 65%);
+  padding: 20px 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 35%, transparent 60%);
   opacity: 0;
-  transition: opacity 400ms ease;
-  z-index: 3;
+  transition: opacity 500ms ease;
+  z-index: 4;
   pointer-events: none;
 }
 .phone-frame:hover .phone-info { opacity: 1; }
 .phone-info-tag {
   font-size: 9px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 700;
   color: var(--voltage);
@@ -639,63 +681,72 @@ nav.scrolled { background: rgba(13,13,13,0.82); border-bottom-color: rgba(255,25
 }
 .phone-info-title {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 .phone-info-desc {
   font-size: 11px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.55);
   line-height: 1.5;
-}
-
-.showcase-columns:hover .showcase-col-inner { animation-play-state: paused; }
-
-.showcase-video-row {
-  max-width: 1000px;
-  margin: 56px auto 0;
-  padding: 0 24px;
-}
-.showcase-video-frame {
-  border-radius: 20px;
-  overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.1);
-  box-shadow: 0 16px 60px rgba(0,0,0,0.5);
-  background: #000;
-}
-.showcase-video-frame video {
-  width: 100%;
-  display: block;
 }
 
 .showcase-marquee {
   overflow: hidden;
-  padding: 48px 0 0;
+  padding: 0;
   white-space: nowrap;
   position: relative;
 }
 .showcase-marquee-track {
   display: inline-flex;
-  animation: marqueeScroll 18s linear infinite;
+  align-items: center;
+  animation: marqueeScroll 20s linear infinite;
 }
 .showcase-marquee-track span {
   font-family: var(--font-display);
-  font-size: clamp(36px, 6vw, 72px);
+  font-size: clamp(40px, 7vw, 80px);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.08);
-  padding: 0 32px;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.12);
+  letter-spacing: 0.05em;
+  color: transparent;
+  padding: 0 28px;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,0.12);
 }
-.showcase-marquee-track span.accent {
-  color: rgba(200,240,0,0.15);
-  -webkit-text-stroke-color: rgba(200,240,0,0.2);
+.showcase-marquee-track span.filled {
+  color: rgba(255,255,255,0.06);
+  -webkit-text-stroke: 1.5px rgba(255,255,255,0.15);
+}
+.showcase-marquee-track span.accent-stroke {
+  -webkit-text-stroke-color: rgba(200,240,0,0.25);
+  color: rgba(200,240,0,0.06);
+}
+.showcase-marquee-track .dot {
+  font-size: clamp(24px, 3vw, 40px);
+  color: rgba(200,240,0,0.2);
+  -webkit-text-stroke: 0;
+  padding: 0 12px;
 }
 @keyframes marqueeScroll {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+
+.showcase-video-row {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px 100px;
+}
+.showcase-video-frame {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  background: #000;
+}
+.showcase-video-frame video {
+  width: 100%;
+  display: block;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1446,180 +1497,190 @@ body.modal-open { overflow: hidden; }
 
 <!-- ============ SHOWCASE ============ -->
 <section class="showcase" id="showcase">
-  <div class="showcase-header">
-    <div class="section-label reveal" style="background:rgba(200,240,0,0.1);color:var(--voltage);">Selected work</div>
-    <h2 class="section-title reveal" style="color:#fff;">A closer look</h2>
-    <p class="section-desc reveal" style="color:rgba(255,255,255,0.45);">Branding, typography, UI/UX, editorial, and motion — hover any frame to learn more.</p>
+
+  <!-- Editorial intro title -->
+  <div class="showcase-intro">
+    <div class="showcase-intro-left">
+      <div class="section-number reveal">02 &mdash; Selected work</div>
+      <h2 class="showcase-big-title reveal">A closer<br><em>look</em></h2>
+    </div>
+    <div class="showcase-intro-right reveal">
+      <p>Branding, typography, UI/UX, editorial, and motion &mdash; hover any frame to see the full picture.</p>
+    </div>
   </div>
 
+  <!-- Scrolling columns — span full width -->
   <div class="showcase-columns">
-    <!-- Column 1 — scrolls up -->
+    <!-- Column 1 -->
     <div class="showcase-col">
       <div class="showcase-col-inner">
         <div class="phone-frame">
           <img src="assets/work-hellmanns.png" alt="Hellmann's ad concept" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Advertising</div><div class="phone-info-title">Hellmann's — bowtie pasta</div><div class="phone-info-desc">Art direction and copywriting for a playful social ad concept.</div></div>
+          <div class="phone-info"><div class="phone-info-tag">Advertising</div><div class="phone-info-title">Hellmann's &mdash; to dip or not to dip</div><div class="phone-info-desc">Playful social ad concept with bowtie pasta and french fries for the Hellmann's brand.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-keleton.png" alt="Keleton typeface" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Typography</div><div class="phone-info-title">Keleton, 2023</div><div class="phone-info-desc">Custom typeface inspired by Corinne Ang — thin lines expressing curvature.</div></div>
+          <img src="assets/work-keleton.png" alt="Keleton typeface poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Typography</div><div class="phone-info-title">Keleton &mdash; custom typeface</div><div class="phone-info-desc">Typeface built from thin curving lines, inspired by the work of Corinne Ang. 2023.</div></div>
         </div>
         <div class="phone-frame">
           <img src="assets/work-bubel-screens.png" alt="Bubel app screens" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">UI/UX</div><div class="phone-info-title">Bubel — note-taking app</div><div class="phone-info-desc">Mobile-first interface with categorised notes, projects, and sharing features.</div></div>
+          <div class="phone-info"><div class="phone-info-tag">UI/UX</div><div class="phone-info-title">Bubel &mdash; mobile app interface</div><div class="phone-info-desc">Note-taking app with pinned, shared, and project views. Categorised task management.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-zanele-1.png" alt="Zanele Muholi poster" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi — Tate Modern</div><div class="phone-info-desc">Exhibition poster design exploring identity through visual activism.</div></div>
+          <img src="assets/work-zanele-1.png" alt="Zanele Muholi Tate poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi &mdash; Tate Modern</div><div class="phone-info-desc">Exhibition poster with textured hair framing, bold vertical type, and sponsorship strip.</div></div>
         </div>
         <div class="phone-frame">
           <img src="assets/work-hellmanns.png" alt="Hellmann's ad concept" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Advertising</div><div class="phone-info-title">Hellmann's — bowtie pasta</div><div class="phone-info-desc">Art direction and copywriting for a playful social ad concept.</div></div>
+          <div class="phone-info"><div class="phone-info-tag">Advertising</div><div class="phone-info-title">Hellmann's &mdash; to dip or not to dip</div><div class="phone-info-desc">Playful social ad concept with bowtie pasta and french fries for the Hellmann's brand.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-keleton.png" alt="Keleton typeface" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Typography</div><div class="phone-info-title">Keleton, 2023</div><div class="phone-info-desc">Custom typeface inspired by Corinne Ang — thin lines expressing curvature.</div></div>
+          <img src="assets/work-keleton.png" alt="Keleton typeface poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Typography</div><div class="phone-info-title">Keleton &mdash; custom typeface</div><div class="phone-info-desc">Typeface built from thin curving lines, inspired by the work of Corinne Ang. 2023.</div></div>
         </div>
         <div class="phone-frame">
           <img src="assets/work-bubel-screens.png" alt="Bubel app screens" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">UI/UX</div><div class="phone-info-title">Bubel — note-taking app</div><div class="phone-info-desc">Mobile-first interface with categorised notes, projects, and sharing features.</div></div>
+          <div class="phone-info"><div class="phone-info-tag">UI/UX</div><div class="phone-info-title">Bubel &mdash; mobile app interface</div><div class="phone-info-desc">Note-taking app with pinned, shared, and project views. Categorised task management.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-zanele-1.png" alt="Zanele Muholi poster" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi — Tate Modern</div><div class="phone-info-desc">Exhibition poster design exploring identity through visual activism.</div></div>
+          <img src="assets/work-zanele-1.png" alt="Zanele Muholi Tate poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi &mdash; Tate Modern</div><div class="phone-info-desc">Exhibition poster with textured hair framing, bold vertical type, and sponsorship strip.</div></div>
         </div>
       </div>
     </div>
 
-    <!-- Column 2 — scrolls down -->
+    <!-- Column 2 -->
     <div class="showcase-col">
       <div class="showcase-col-inner">
         <div class="phone-frame">
-          <img src="assets/work-spirituals-dark.png" alt="The Spirituals brand guideline" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">The Spirituals — dark cover</div><div class="phone-info-desc">Brand guideline book cover — logo system and typographic identity.</div></div>
+          <img src="assets/work-spirituals-dark.png" alt="The Spirituals dark brand guideline" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">The Spirituals &mdash; dark cover</div><div class="phone-info-desc">Brand guideline book for a gospel choir service. Logo, feather mark, and type system.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-portrait-bw.png" alt="Grain portrait" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Photography</div><div class="phone-info-title">Grain portrait study</div><div class="phone-info-desc">Halftone grain self-portrait exploring texture and digital artefacts.</div></div>
+          <img src="assets/work-portrait-bw.png" alt="Halftone self-portrait" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Photography</div><div class="phone-info-title">Halftone self-portrait</div><div class="phone-info-desc">Grainy black-and-white seated portrait with dashed crop marks and digital grain texture.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-eastwest.png" alt="East West Commercial website" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">UI/UX</div><div class="phone-info-title">East West Commercial</div><div class="phone-info-desc">Website redesign for a commercial real estate firm — Figma prototype.</div></div>
+          <img src="assets/work-eastwest.png" alt="East West Commercial Figma prototype" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">UI/UX</div><div class="phone-info-title">East West Commercial</div><div class="phone-info-desc">Website redesign for a real estate business. Figma prototype with interactive options and animations.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-zanele-3.png" alt="Zanele Muholi poster variant" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi — hooded</div><div class="phone-info-desc">Alternative exhibition poster — dramatic lighting and vertical typography.</div></div>
+          <img src="assets/work-zanele-3.png" alt="Zanele Muholi hooded poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi &mdash; wrapped portrait</div><div class="phone-info-desc">Dramatic B&amp;W exhibition poster. Subject wrapped in fabric, overlapping vertical and horizontal text.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-spirituals-dark.png" alt="The Spirituals brand guideline" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">The Spirituals — dark cover</div><div class="phone-info-desc">Brand guideline book cover — logo system and typographic identity.</div></div>
+          <img src="assets/work-spirituals-dark.png" alt="The Spirituals dark brand guideline" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">The Spirituals &mdash; dark cover</div><div class="phone-info-desc">Brand guideline book for a gospel choir service. Logo, feather mark, and type system.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-portrait-bw.png" alt="Grain portrait" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Photography</div><div class="phone-info-title">Grain portrait study</div><div class="phone-info-desc">Halftone grain self-portrait exploring texture and digital artefacts.</div></div>
+          <img src="assets/work-portrait-bw.png" alt="Halftone self-portrait" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Photography</div><div class="phone-info-title">Halftone self-portrait</div><div class="phone-info-desc">Grainy black-and-white seated portrait with dashed crop marks and digital grain texture.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-eastwest.png" alt="East West Commercial website" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">UI/UX</div><div class="phone-info-title">East West Commercial</div><div class="phone-info-desc">Website redesign for a commercial real estate firm — Figma prototype.</div></div>
+          <img src="assets/work-eastwest.png" alt="East West Commercial Figma prototype" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">UI/UX</div><div class="phone-info-title">East West Commercial</div><div class="phone-info-desc">Website redesign for a real estate business. Figma prototype with interactive options and animations.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-zanele-3.png" alt="Zanele Muholi poster variant" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi — hooded</div><div class="phone-info-desc">Alternative exhibition poster — dramatic lighting and vertical typography.</div></div>
+          <img src="assets/work-zanele-3.png" alt="Zanele Muholi hooded poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi &mdash; wrapped portrait</div><div class="phone-info-desc">Dramatic B&amp;W exhibition poster. Subject wrapped in fabric, overlapping vertical and horizontal text.</div></div>
         </div>
       </div>
     </div>
 
-    <!-- Column 3 — scrolls up -->
+    <!-- Column 3 -->
     <div class="showcase-col">
       <div class="showcase-col-inner">
         <div class="phone-frame">
           <img src="assets/work-bubel-logo.png" alt="Bubel logo" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">Bubel — brand identity</div><div class="phone-info-desc">Logo design for a note-taking app — overlapping forms and soft gradients.</div></div>
+          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">Bubel &mdash; brand identity</div><div class="phone-info-desc">Logo for a note-taking app. Overlapping organic forms in teal, amber, and soft pink on black.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-poster-algb.png" alt="A Little Good Boys poster" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zac Denzil — live poster</div><div class="phone-info-desc">Expressive event poster — hand-drawn lettering meets typographic hierarchy.</div></div>
+          <img src="assets/work-poster-algb.png" alt="A Little Good Boys live poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Graphic design</div><div class="phone-info-title">A Little Good Boys &mdash; live poster</div><div class="phone-info-desc">Event poster for Zac Denzil. Hand-drawn orange type on black with dangling letterforms.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-atomic-habits.png" alt="Atomic Habits book cover redesign" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Atomic Habits — cover redesign</div><div class="phone-info-desc">Speculative book cover reimagining the periodic table concept with teal and olive.</div></div>
+          <img src="assets/work-atomic-habits.png" alt="Atomic Habits book redesign" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Atomic Habits &mdash; cover redesign</div><div class="phone-info-desc">Speculative redesign using periodic table motif. Teal cover with olive background and white line art.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-zanele-2.png" alt="Zanele Muholi collage" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi — collage</div><div class="phone-info-desc">Deconstructed exhibition poster mixing photographic fragments and whitespace.</div></div>
+          <img src="assets/work-zanele-2.png" alt="Zanele Muholi photo collage" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi &mdash; Tate collage</div><div class="phone-info-desc">Deconstructed exhibition poster. Scattered passport photos, paper cutouts, and fragmented face on white.</div></div>
         </div>
         <div class="phone-frame">
           <img src="assets/work-bubel-logo.png" alt="Bubel logo" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">Bubel — brand identity</div><div class="phone-info-desc">Logo design for a note-taking app — overlapping forms and soft gradients.</div></div>
+          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">Bubel &mdash; brand identity</div><div class="phone-info-desc">Logo for a note-taking app. Overlapping organic forms in teal, amber, and soft pink on black.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-poster-algb.png" alt="A Little Good Boys poster" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zac Denzil — live poster</div><div class="phone-info-desc">Expressive event poster — hand-drawn lettering meets typographic hierarchy.</div></div>
+          <img src="assets/work-poster-algb.png" alt="A Little Good Boys live poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Graphic design</div><div class="phone-info-title">A Little Good Boys &mdash; live poster</div><div class="phone-info-desc">Event poster for Zac Denzil. Hand-drawn orange type on black with dangling letterforms.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-atomic-habits.png" alt="Atomic Habits book cover redesign" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Atomic Habits — cover redesign</div><div class="phone-info-desc">Speculative book cover reimagining the periodic table concept with teal and olive.</div></div>
+          <img src="assets/work-atomic-habits.png" alt="Atomic Habits book redesign" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Atomic Habits &mdash; cover redesign</div><div class="phone-info-desc">Speculative redesign using periodic table motif. Teal cover with olive background and white line art.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-zanele-2.png" alt="Zanele Muholi collage" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi — collage</div><div class="phone-info-desc">Deconstructed exhibition poster mixing photographic fragments and whitespace.</div></div>
+          <img src="assets/work-zanele-2.png" alt="Zanele Muholi photo collage" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi &mdash; Tate collage</div><div class="phone-info-desc">Deconstructed exhibition poster. Scattered passport photos, paper cutouts, and fragmented face on white.</div></div>
         </div>
       </div>
     </div>
 
-    <!-- Column 4 — scrolls down -->
+    <!-- Column 4 -->
     <div class="showcase-col">
       <div class="showcase-col-inner">
         <div class="phone-frame">
-          <img src="assets/work-spirituals-gold.png" alt="The Spirituals gold cover" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">The Spirituals — gold variant</div><div class="phone-info-desc">Alternative brand guideline colourway — warm gold with white typography.</div></div>
+          <img src="assets/work-spirituals-gold.png" alt="The Spirituals gold brand guideline" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">The Spirituals &mdash; gold variant</div><div class="phone-info-desc">Alternative colourway for the brand guideline. Warm gold background with white feather motif.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-typography.png" alt="Mrs Eaves typography workshop" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Typography</div><div class="phone-info-title">Mrs Eaves — university workshop</div><div class="phone-info-desc">Type specimen spreads exploring Mrs Eaves by Zuzana Licko — print and layout.</div></div>
+          <img src="assets/work-typography.png" alt="Mrs Eaves type specimens" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Typography</div><div class="phone-info-title">Mrs Eaves &mdash; type specimens</div><div class="phone-info-desc">Six book mockup spreads for a university workshop exploring Mrs Eaves by Zuzana Licko.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-zanele-1.png" alt="Zanele Muholi poster" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi — main poster</div><div class="phone-info-desc">Bold B&amp;W exhibition poster for Tate Modern with layered text framing.</div></div>
+          <img src="assets/work-zanele-1.png" alt="Zanele Muholi main poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi &mdash; main poster</div><div class="phone-info-desc">Bold B&amp;W poster for Tate Modern. Layered vertical and horizontal type framing a textured portrait.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-hellmanns.png" alt="Hellmann's concept" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Advertising</div><div class="phone-info-title">Hellmann's — concept</div><div class="phone-info-desc">Playful advertising concept — to dip or not to dip?</div></div>
+          <img src="assets/work-hellmanns.png" alt="Hellmann's ad" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Advertising</div><div class="phone-info-title">Hellmann's &mdash; bowtie concept</div><div class="phone-info-desc">Art direction for a snack-time social ad. French fries, bowtie pasta, and the Hellmann's ribbon.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-spirituals-gold.png" alt="The Spirituals gold cover" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">The Spirituals — gold variant</div><div class="phone-info-desc">Alternative brand guideline colourway — warm gold with white typography.</div></div>
+          <img src="assets/work-spirituals-gold.png" alt="The Spirituals gold brand guideline" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Branding</div><div class="phone-info-title">The Spirituals &mdash; gold variant</div><div class="phone-info-desc">Alternative colourway for the brand guideline. Warm gold background with white feather motif.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-typography.png" alt="Mrs Eaves typography workshop" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Typography</div><div class="phone-info-title">Mrs Eaves — university workshop</div><div class="phone-info-desc">Type specimen spreads exploring Mrs Eaves by Zuzana Licko — print and layout.</div></div>
+          <img src="assets/work-typography.png" alt="Mrs Eaves type specimens" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Typography</div><div class="phone-info-title">Mrs Eaves &mdash; type specimens</div><div class="phone-info-desc">Six book mockup spreads for a university workshop exploring Mrs Eaves by Zuzana Licko.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-zanele-1.png" alt="Zanele Muholi poster" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi — main poster</div><div class="phone-info-desc">Bold B&amp;W exhibition poster for Tate Modern with layered text framing.</div></div>
+          <img src="assets/work-zanele-1.png" alt="Zanele Muholi main poster" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Editorial</div><div class="phone-info-title">Zanele Muholi &mdash; main poster</div><div class="phone-info-desc">Bold B&amp;W poster for Tate Modern. Layered vertical and horizontal type framing a textured portrait.</div></div>
         </div>
         <div class="phone-frame">
-          <img src="assets/work-hellmanns.png" alt="Hellmann's concept" loading="lazy">
-          <div class="phone-info"><div class="phone-info-tag">Advertising</div><div class="phone-info-title">Hellmann's — concept</div><div class="phone-info-desc">Playful advertising concept — to dip or not to dip?</div></div>
+          <img src="assets/work-hellmanns.png" alt="Hellmann's ad" loading="lazy">
+          <div class="phone-info"><div class="phone-info-tag">Advertising</div><div class="phone-info-title">Hellmann's &mdash; bowtie concept</div><div class="phone-info-desc">Art direction for a snack-time social ad. French fries, bowtie pasta, and the Hellmann's ribbon.</div></div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Centred scrolling keywords -->
+  <div class="showcase-marquee" aria-hidden="true">
+    <div class="showcase-marquee-track">
+      <span class="filled accent-stroke">Strategy</span><span class="dot">&bull;</span><span class="filled">Design</span><span class="dot">&bull;</span><span class="filled accent-stroke">Branding</span><span class="dot">&bull;</span><span class="filled">User-centric</span><span class="dot">&bull;</span>
+      <span class="filled accent-stroke">Strategy</span><span class="dot">&bull;</span><span class="filled">Design</span><span class="dot">&bull;</span><span class="filled accent-stroke">Branding</span><span class="dot">&bull;</span><span class="filled">User-centric</span><span class="dot">&bull;</span>
+      <span class="filled accent-stroke">Strategy</span><span class="dot">&bull;</span><span class="filled">Design</span><span class="dot">&bull;</span><span class="filled accent-stroke">Branding</span><span class="dot">&bull;</span><span class="filled">User-centric</span><span class="dot">&bull;</span>
+      <span class="filled accent-stroke">Strategy</span><span class="dot">&bull;</span><span class="filled">Design</span><span class="dot">&bull;</span><span class="filled accent-stroke">Branding</span><span class="dot">&bull;</span><span class="filled">User-centric</span><span class="dot">&bull;</span>
+    </div>
+  </div>
+
+  <!-- Video reel -->
   <div class="showcase-video-row reveal">
     <div class="showcase-video-frame">
       <video src="assets/main-reel.mp4" controls preload="metadata" playsinline></video>
     </div>
   </div>
 
-  <div class="showcase-marquee" aria-hidden="true">
-    <div class="showcase-marquee-track">
-      <span class="accent">Strategy</span><span>&bull;</span><span>Design</span><span>&bull;</span><span class="accent">Branding</span><span>&bull;</span><span>User-centric</span><span>&bull;</span>
-      <span class="accent">Strategy</span><span>&bull;</span><span>Design</span><span>&bull;</span><span class="accent">Branding</span><span>&bull;</span><span>User-centric</span><span>&bull;</span>
-      <span class="accent">Strategy</span><span>&bull;</span><span>Design</span><span>&bull;</span><span class="accent">Branding</span><span>&bull;</span><span>User-centric</span><span>&bull;</span>
-      <span class="accent">Strategy</span><span>&bull;</span><span>Design</span><span>&bull;</span><span class="accent">Branding</span><span>&bull;</span><span>User-centric</span><span>&bull;</span>
-    </div>
-  </div>
 </section>
 
 <!-- ============ PORTFOLIO ============ -->
