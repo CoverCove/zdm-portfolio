@@ -2249,7 +2249,8 @@ body.modal-open { overflow: hidden; }
   }
 
   async function subscribeEmail(email, firstName, fields) {
-    var res = await fetch(
+    /* Step 1: subscribe to the form (creates/updates subscriber, captures custom fields) */
+    var formRes = await fetch(
       'https://api.convertkit.com/v3/forms/' + CK_FORM_ID + '/subscribe',
       {
         method: 'POST',
@@ -2258,13 +2259,29 @@ body.modal-open { overflow: hidden; }
           api_key: CK_API_KEY,
           email: email,
           first_name: firstName,
-          fields: fields,
-          tags: [CK_TAG_ID]
+          fields: fields
         })
       }
     );
-    if (!res.ok) throw new Error('ConvertKit returned ' + res.status);
-    return res.json();
+    if (!formRes.ok) throw new Error('ConvertKit form subscribe returned ' + formRes.status);
+    var formData = await formRes.json();
+
+    /* Step 2: apply the "paid-subscriber" tag explicitly via the tag endpoint */
+    var tagRes = await fetch(
+      'https://api.convertkit.com/v3/tags/' + CK_TAG_ID + '/subscribe',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          api_key: CK_API_KEY,
+          email: email,
+          first_name: firstName
+        })
+      }
+    );
+    if (!tagRes.ok) throw new Error('ConvertKit tag subscribe returned ' + tagRes.status);
+
+    return formData;
   }
 
   if (form) {
@@ -2276,7 +2293,17 @@ body.modal-open { overflow: hidden; }
       var sel      = needEl.options[needEl.selectedIndex] ? needEl.options[needEl.selectedIndex].text : '';
       var brief    = document.getElementById('intakeBrief').value.trim();
 
-      if (!emailVal) { status.textContent = 'Please enter your email.'; return; }
+      status.style.color = '';
+      if (!emailVal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+        status.style.color = '#e55';
+        status.textContent = 'Please enter a valid email address.';
+        return;
+      }
+      if (!sel) {
+        status.style.color = '#e55';
+        status.textContent = 'Please select a service type.';
+        return;
+      }
 
       status.textContent = 'Sending…';
       setSubmitting(true);
@@ -2287,11 +2314,13 @@ body.modal-open { overflow: hidden; }
           project_brief: brief
         });
         status.style.color = 'var(--growth)';
-        status.textContent = (nameVal ? 'Thanks, ' + nameVal + '!' : 'Thanks!') + ' Your ' + sel + ' request has been received. I\'ll be in touch shortly.';
+        status.textContent = (nameVal ? 'Thanks, ' + nameVal + '!' : 'Thanks!')
+          + ' Your ' + sel + ' request has been received — I\'ll be in touch shortly.';
         form.reset();
       } catch (err) {
         status.style.color = '#e55';
         status.textContent = 'Something went wrong — please try again or email businesscovercove@gmail.com directly.';
+        console.error(err);
       } finally {
         setSubmitting(false);
       }
