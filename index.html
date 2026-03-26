@@ -204,8 +204,8 @@ nav.scrolled { background: rgba(10,15,26,0.92); border-bottom-color: var(--steel
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 120px 24px 80px;
+  justify-content: flex-end;
+  padding: 0 0 80px;
   background: var(--obsidian);
   color: #fff;
   overflow: hidden;
@@ -216,7 +216,7 @@ nav.scrolled { background: rgba(10,15,26,0.92); border-bottom-color: var(--steel
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.2;
+  opacity: 0.12;
   pointer-events: none;
 }
 .hero-overlay {
@@ -224,35 +224,110 @@ nav.scrolled { background: rgba(10,15,26,0.92); border-bottom-color: var(--steel
   inset: 0;
   background:
     radial-gradient(ellipse at var(--mx, 50%) var(--my, 30%), rgba(59,130,246,0.04) 0%, transparent 50%),
-    linear-gradient(to bottom, rgba(10,15,26,0.3) 0%, rgba(10,15,26,0.85) 100%);
+    linear-gradient(to bottom, rgba(10,15,26,0.1) 0%, rgba(10,15,26,0.92) 70%);
   pointer-events: none;
   transition: background 300ms ease;
+  z-index: 1;
 }
+
+/* Full-bleed "Zac Morrison" title */
+.hero-name-fullbleed {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  padding: 0 2vw;
+  pointer-events: none;
+  user-select: none;
+}
+.hero-name-fullbleed-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(80px, 14vw, 180px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  color: rgba(255,255,255,0.055);
+  width: 100%;
+  text-align: center;
+}
+.hero-name-fullbleed-text .nm-letter {
+  display: inline-block;
+  transition: color 350ms ease, transform 350ms ease;
+}
+.hero-name-fullbleed-text .nm-letter.nm-lit {
+  color: rgba(59,130,246,0.18);
+}
+.hero-name-fullbleed-text .nm-space { display: inline-block; width: 0.22em; }
+
+/* Canvas for wireframe/flow effects */
+#heroCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Figma-style floating cursors */
+.figma-cursor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  transform: translate(-2px, -2px);
+  will-change: transform;
+}
+.figma-cursor svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+.figma-cursor-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  margin-top: 18px;
+  letter-spacing: 0.01em;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.figma-cursor.is-active .figma-cursor-label { opacity: 1; }
+
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 48px 40px;
+  max-width: 640px;
+  margin: 0;
+  padding: 0 40px 0 60px;
 }
-@media (max-width: 768px) { .hero-content { padding: 32px 20px; border-radius: 20px; } }
+@media (max-width: 768px) { .hero-content { padding: 0 20px; max-width: 100%; } }
+
 .hero-eyebrow {
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.45);
   font-weight: 500;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .hero h1 {
   font-family: var(--font-display);
-  font-size: clamp(42px, 6vw, 72px);
+  font-size: clamp(36px, 4vw, 56px);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.035em;
-  max-width: 820px;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 .hero h1 .word {
   display: inline-block;
@@ -266,35 +341,14 @@ nav.scrolled { background: rgba(10,15,26,0.92); border-bottom-color: var(--steel
 @keyframes heroWord {
   to { opacity: 1; transform: translateY(0); }
 }
-.hero h1 .accent {
-  color: var(--signal);
-}
-.hero-name {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  margin-top: 8px;
-  margin-bottom: 20px;
-}
-.hero-name .letter {
-  font-family: var(--font-display);
-  font-size: clamp(32px, 5vw, 56px);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: rgba(255,255,255,0.25);
-  transition: color 300ms ease;
-  display: inline-block;
-}
-.hero-name .letter.space { width: 0.3em; }
-.hero-name .letter.lit { color: var(--pulse); }
+.hero h1 .accent { color: var(--signal); }
 
 .hero-sub {
-  font-size: 17px;
+  font-size: 15px;
   color: rgba(255,255,255,0.55);
-  max-width: 520px;
+  max-width: 420px;
   line-height: 1.75;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
 
@@ -1342,6 +1396,9 @@ body.modal-open { overflow: hidden; }
   .hero-spotlight { display: none; }
   .hero-video-bg { display: none; }
   .tilt-card .card-sheen { display: none; }
+  .figma-cursor { display: none; }
+  #heroCanvas { display: none; }
+  .hero-name-fullbleed-text .nm-letter { transition: none; }
 }
 </style>
 <noscript><style>.reveal{opacity:1!important;transform:none!important}.hero h1 .word{opacity:1!important;transform:none!important;animation:none!important}</style></noscript>
@@ -1370,13 +1427,25 @@ body.modal-open { overflow: hidden; }
     <source src="assets/showreel.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay" id="heroOverlay" aria-hidden="true"></div>
+
+  <!-- Full-bleed background name -->
+  <div class="hero-name-fullbleed" aria-hidden="true">
+    <div class="hero-name-fullbleed-text" id="heroNameBg"></div>
+  </div>
+
+  <!-- Wireframe / user-flow canvas -->
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+  <!-- Figma-style floating cursors (populated by JS) -->
+  <div id="figmaCursors" aria-hidden="true"></div>
+
   <div class="hero-spotlight" id="heroSpotlight" aria-hidden="true"></div>
+
   <div class="hero-content">
     <p class="hero-eyebrow reveal">Portfolio &middot; Case studies &middot; Client onboarding</p>
     <h1><span class="word">From</span> <span class="word">edits</span> <span class="word">to</span> <span class="word accent">systems.</span></h1>
-    <div class="hero-name reveal reveal-delay-1" id="heroName" aria-label="Zac Morrison"></div>
-    <p class="hero-sub reveal reveal-delay-2">Zac Morrison builds brands that convert. Five years of video editing, a graphic design degree, and real-world results across email, print, and digital.</p>
-    <div class="hero-actions reveal reveal-delay-3">
+    <p class="hero-sub reveal reveal-delay-1">Zac Morrison builds brands that convert. Five years of video editing, a graphic design degree, and real-world results across email, print, and digital.</p>
+    <div class="hero-actions reveal reveal-delay-2">
       <a class="btn btn-primary" href="#portfolio" data-magnetic>
         See the work
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2354,39 +2423,260 @@ body.modal-open { overflow: hidden; }
     });
   }
 
-  /* ---- "Zac Morrison" per-letter colour ---- */
-  var heroNameEl = document.getElementById('heroName');
-  var nameLetters = [];
-  if (heroNameEl) {
-    var nameStr = 'Zac Morrison';
-    for (var n = 0; n < nameStr.length; n++) {
-      var span = document.createElement('span');
-      span.className = nameStr[n] === ' ' ? 'letter space' : 'letter';
-      span.textContent = nameStr[n] === ' ' ? '\u00A0' : nameStr[n];
-      heroNameEl.appendChild(span);
-      nameLetters.push(span);
-    }
-  }
+  /* ================================================================
+     HERO SYSTEM: Full-bleed name + Figma cursors + Wireframe canvas
+     ================================================================ */
+  (function () {
+    if (prm) return;
 
-  /* ---- Hero spotlight + parallax background ---- */
-  var heroSection = document.getElementById('hero');
-  var spotlight = document.getElementById('heroSpotlight');
-  var heroBg = document.getElementById('heroBg');
-  var heroOverlay = document.getElementById('heroOverlay');
-  if (heroSection && !prm) {
+    var heroSection = document.getElementById('hero');
+    var spotlight   = document.getElementById('heroSpotlight');
+    var heroOverlay = document.getElementById('heroOverlay');
+    if (!heroSection) return;
+
+    /* --- 1. Build full-bleed "Zac Morrison" letters --- */
+    var nameBgEl = document.getElementById('heroNameBg');
+    var bgLetters = [];
+    if (nameBgEl) {
+      var nm = 'Zac Morrison';
+      nm.split('').forEach(function (ch) {
+        if (ch === ' ') {
+          var sp = document.createElement('span');
+          sp.className = 'nm-space';
+          nameBgEl.appendChild(sp);
+        } else {
+          var ltr = document.createElement('span');
+          ltr.className = 'nm-letter';
+          ltr.textContent = ch;
+          nameBgEl.appendChild(ltr);
+          bgLetters.push(ltr);
+        }
+      });
+    }
+
+    /* --- 2. Wireframe / user-flow canvas --- */
+    var canvas = document.getElementById('heroCanvas');
+    var ctx = canvas ? canvas.getContext('2d') : null;
+    var nodes = [];
+    var connections = [];
+    var drawProgress = 0;  // 0-1 per connection being drawn
+    var currentConn = 0;
+    var mouseX = -999, mouseY = -999;
+    var hW, hH;
+
+    var NODE_LABELS = ['Research','Wireframe','Prototype','Test','Launch','Iterate','Define','Ideate'];
+    var NODE_COUNT = 7;
+
+    function resizeCanvas () {
+      if (!canvas) return;
+      hW = heroSection.offsetWidth;
+      hH = heroSection.offsetHeight;
+      canvas.width  = hW;
+      canvas.height = hH;
+      buildNodes();
+    }
+
+    function buildNodes () {
+      nodes = [];
+      connections = [];
+      currentConn = 0;
+      drawProgress = 0;
+
+      /* Place nodes avoiding the bottom-left content area */
+      var attempts = 0;
+      while (nodes.length < NODE_COUNT && attempts < 400) {
+        attempts++;
+        var nx = 80 + Math.random() * (hW - 160);
+        var ny = 80 + Math.random() * (hH - 180);
+        /* Keep away from content (bottom-left) */
+        if (nx < hW * 0.48 && ny > hH * 0.52) continue;
+        /* Min spacing */
+        var ok = nodes.every(function (n) { return Math.hypot(n.x - nx, n.y - ny) > 120; });
+        if (!ok) continue;
+        nodes.push({
+          x: nx, y: ny,
+          r: 5,
+          label: NODE_LABELS[nodes.length % NODE_LABELS.length],
+          alpha: 0,
+          drawLabel: 0
+        });
+      }
+
+      /* Connect nearest neighbours */
+      nodes.forEach(function (n, i) {
+        var sorted = nodes.slice().sort(function (a, b) {
+          return Math.hypot(a.x - n.x, a.y - n.y) - Math.hypot(b.x - n.x, b.y - n.y);
+        });
+        /* Connect to 2 nearest (skip self) */
+        var count = 0;
+        sorted.forEach(function (m) {
+          if (m === n || count >= 2) return;
+          var already = connections.some(function (c) {
+            return (c.a === n && c.b === m) || (c.a === m && c.b === n);
+          });
+          if (!already) {
+            connections.push({ a: n, b: m, progress: 0, done: false });
+            count++;
+          }
+        });
+      });
+    }
+
+    var flowTick = 0;
+    function drawFlow (ts) {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, hW, hH);
+
+      flowTick++;
+
+      /* Advance current connection drawing */
+      if (currentConn < connections.length) {
+        var conn = connections[currentConn];
+        conn.progress = Math.min(1, conn.progress + 0.012);
+        if (conn.progress >= 1) {
+          conn.done = true;
+          currentConn++;
+        }
+      }
+
+      /* Draw all connections */
+      connections.forEach(function (c) {
+        if (c.progress <= 0) return;
+        ctx.save();
+        ctx.strokeStyle = 'rgba(59,130,246,0.18)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 5]);
+        ctx.lineDashOffset = -(flowTick * 0.3);
+        ctx.beginPath();
+        var ex = c.a.x + (c.b.x - c.a.x) * c.progress;
+        var ey = c.a.y + (c.b.y - c.a.y) * c.progress;
+        ctx.moveTo(c.a.x, c.a.y);
+        ctx.lineTo(ex, ey);
+        ctx.stroke();
+        /* Arrow head at end */
+        if (c.progress > 0.85) {
+          var ang = Math.atan2(c.b.y - c.a.y, c.b.x - c.a.x);
+          var ap = (c.progress - 0.85) / 0.15;
+          ctx.setLineDash([]);
+          ctx.strokeStyle = 'rgba(59,130,246,' + (0.22 * ap) + ')';
+          ctx.fillStyle   = 'rgba(59,130,246,' + (0.22 * ap) + ')';
+          ctx.beginPath();
+          ctx.moveTo(ex, ey);
+          ctx.lineTo(ex - 8 * Math.cos(ang - 0.4), ey - 8 * Math.sin(ang - 0.4));
+          ctx.lineTo(ex - 8 * Math.cos(ang + 0.4), ey - 8 * Math.sin(ang + 0.4));
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.restore();
+      });
+
+      /* Draw nodes */
+      nodes.forEach(function (n, i) {
+        /* Fade in after its connecting line is partly drawn */
+        var targetAlpha = (i === 0 || connections.slice(0, i).some(function(c){ return c.b === n && c.progress > 0.5; })) ? 1 : 0;
+        n.alpha += (targetAlpha - n.alpha) * 0.06;
+        if (n.alpha < 0.01) return;
+
+        /* Proximity glow */
+        var dist = Math.hypot(mouseX - n.x, mouseY - n.y);
+        var glow = Math.max(0, 1 - dist / 120);
+
+        ctx.save();
+        ctx.globalAlpha = n.alpha;
+
+        /* Outer ring */
+        ctx.strokeStyle = 'rgba(59,130,246,' + (0.25 + glow * 0.45) + ')';
+        ctx.lineWidth   = 1;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 14 + glow * 4, 0, Math.PI * 2);
+        ctx.stroke();
+
+        /* Inner dot */
+        ctx.fillStyle = 'rgba(59,130,246,' + (0.35 + glow * 0.45) + ')';
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        /* Label */
+        n.drawLabel += (1 - n.drawLabel) * 0.05;
+        ctx.globalAlpha = n.alpha * n.drawLabel * (0.5 + glow * 0.4);
+        ctx.font = '500 10px "DM Sans", sans-serif';
+        ctx.fillStyle = '#E2E8F0';
+        ctx.letterSpacing = '0.06em';
+        ctx.textAlign = 'center';
+        ctx.fillText(n.label.toUpperCase(), n.x, n.y + 28);
+
+        ctx.restore();
+      });
+
+      requestAnimationFrame(drawFlow);
+    }
+
+    /* --- 3. Figma-style ghost cursors --- */
+    var CURSORS = [
+      { name: 'Jordan',  color: '#60A5FA', speed: 0.006, phase: 0,    orbit: 0.32 },
+      { name: 'Priya',   color: '#34D399', speed: 0.009, phase: 2.1,  orbit: 0.25 },
+      { name: 'Marcus',  color: '#F472B6', speed: 0.007, phase: 4.4,  orbit: 0.28 },
+    ];
+    var figmaCursorEls = [];
+
+    var container = document.getElementById('figmaCursors');
+    if (container) {
+      CURSORS.forEach(function (def, i) {
+        var el = document.createElement('div');
+        el.className = 'figma-cursor';
+        el.innerHTML =
+          '<svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+            '<path d="M3 2L14 9L8.5 10.5L7 16L3 2Z" fill="' + def.color + '" fill-opacity="0.9" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>' +
+          '</svg>' +
+          '<span class="figma-cursor-label" style="background:' + def.color + '">' + def.name + '</span>';
+        container.appendChild(el);
+        figmaCursorEls.push({ el: el, def: def, t: def.phase, cx: 0, cy: 0, tx: 0, ty: 0, active: false });
+      });
+    }
+
+    var figmaTick = 0;
+    function animateCursors () {
+      if (!heroSection) return;
+      var r = heroSection.getBoundingClientRect();
+      if (r.height === 0) { requestAnimationFrame(animateCursors); return; }
+      figmaTick++;
+
+      figmaCursorEls.forEach(function (c, i) {
+        c.t += c.def.speed;
+
+        /* Figure-8 / Lissajous path across the hero, avoid bottom-left content */
+        var cx = hW * (0.5 + c.def.orbit * Math.sin(c.t * 1.3));
+        var cy = hH * (0.3 + (c.def.orbit * 0.6) * Math.cos(c.t));
+
+        /* Soft lerp */
+        c.cx += (cx - c.cx) * 0.07;
+        c.cy += (cy - c.cy) * 0.07;
+
+        c.el.style.transform = 'translate(' + c.cx.toFixed(1) + 'px, ' + c.cy.toFixed(1) + 'px)';
+
+        /* Periodically show/hide label */
+        var showLabel = Math.sin(c.t * 0.4 + i) > 0.6;
+        if (showLabel && !c.active) { c.el.classList.add('is-active'); c.active = true; }
+        if (!showLabel && c.active) { c.el.classList.remove('is-active'); c.active = false; }
+      });
+
+      requestAnimationFrame(animateCursors);
+    }
+
+    /* --- 4. Cursor proximity for bg letters + spotlight --- */
     var heroRaf;
     heroSection.addEventListener('pointermove', function (e) {
+      mouseX = e.clientX - heroSection.getBoundingClientRect().left;
+      mouseY = e.clientY - heroSection.getBoundingClientRect().top;
+
       if (heroRaf) cancelAnimationFrame(heroRaf);
       heroRaf = requestAnimationFrame(function () {
         var r = heroSection.getBoundingClientRect();
         var nx = (e.clientX - r.left) / r.width;
         var ny = (e.clientY - r.top) / r.height;
-        var px = ((nx - 0.5) * -30).toFixed(1);
-        var py = ((ny - 0.5) * -20).toFixed(1);
         var mx = (nx * 100).toFixed(1);
         var my = (ny * 100).toFixed(1);
-
-        
         if (heroOverlay) {
           heroOverlay.style.setProperty('--mx', mx + '%');
           heroOverlay.style.setProperty('--my', my + '%');
@@ -2396,24 +2686,25 @@ body.modal-open { overflow: hidden; }
           spotlight.style.setProperty('--my', my + '%');
           spotlight.classList.add('is-active');
         }
-
-        if (nameLetters.length) {
-          nameLetters.forEach(function (ltr) {
-            var lr = ltr.getBoundingClientRect();
-            var lcx = lr.left + lr.width / 2;
-            var lcy = lr.top + lr.height / 2;
-            var dist = Math.hypot(e.clientX - lcx, e.clientY - lcy);
-            ltr.classList.toggle('lit', dist < 120);
-          });
-        }
+        bgLetters.forEach(function (ltr) {
+          var lr = ltr.getBoundingClientRect();
+          var dist = Math.hypot(e.clientX - (lr.left + lr.width / 2), e.clientY - (lr.top + lr.height / 2));
+          ltr.classList.toggle('nm-lit', dist < 160);
+        });
       });
     });
     heroSection.addEventListener('pointerleave', function () {
       if (spotlight) spotlight.classList.remove('is-active');
-      
-      nameLetters.forEach(function (ltr) { ltr.classList.remove('lit'); });
+      bgLetters.forEach(function (l) { l.classList.remove('nm-lit'); });
+      mouseX = mouseY = -999;
     });
-  }
+
+    /* --- Init --- */
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    requestAnimationFrame(drawFlow);
+    requestAnimationFrame(animateCursors);
+  })();
 
   /* ---- 3D card tilt ---- */
   var tiltCards = [].slice.call(document.querySelectorAll('.tilt-card'));
