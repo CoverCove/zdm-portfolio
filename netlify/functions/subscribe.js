@@ -10,6 +10,7 @@ exports.handler = async (event) => {
         api_key: "IJCPdv2qLecFQuikL7h6Hw",
         email,
         first_name: firstName,
+        tags: [1918923],
       }),
     }
   );
